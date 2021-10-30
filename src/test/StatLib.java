@@ -1,11 +1,16 @@
 package test;
 
 
+
 public class StatLib {
 
 	// simple average
 	public static float avg(float[] x){
-		return 0;
+		float total = 0;
+		for (float num : x) {
+			total += num;
+		}
+		return total / x.length;
 	}
 
 	// returns the variance of X and Y
