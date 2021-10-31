@@ -32,8 +32,12 @@ public class StatLib {
 
     // returns the covariance of X and Y
     public static float cov(float[] x, float[] y) {
+        float sum = 0;
+        final int n = x.length;
 
-        return 0;
+        for(int i = 0; i < n; i++)
+            sum += (x[i] - getMean(x, n)) * (y[i] - getMean(y, n));
+        return sum / (n - 1);
     }
 
     // returns the Pearson correlation coefficient of X and Y
