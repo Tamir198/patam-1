@@ -39,7 +39,7 @@ public class StatLib {
 
         for (int i = 0; i < n; i++)
             sum += (x[i] - getMean(x, n)) * (y[i] - getMean(y, n));
-        return sum / (n - 1);
+        return sum / (n);
     }
 
     // returns the Pearson correlation coefficient of X and Y
@@ -66,7 +66,7 @@ public class StatLib {
 
     // returns the deviation between point p and the line equation of the points
     public static float dev(Point p, Point[] points) {
-        return 0;
+
     }
 
     // returns the deviation between point p and the line
