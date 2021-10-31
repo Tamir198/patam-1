@@ -66,11 +66,13 @@ public class StatLib {
 
     // returns the deviation between point p and the line equation of the points
     public static float dev(Point p, Point[] points) {
+        final Line l = linear_reg(points);
+        return Math.abs(p.y - l.f(p.x));
 
     }
 
     // returns the deviation between point p and the line
     public static float dev(Point p, Line l) {
-        return 0;
+        return Math.abs(p.y - l.f(p.x));
     }
 }
