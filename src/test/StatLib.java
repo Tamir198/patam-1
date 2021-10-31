@@ -1,6 +1,8 @@
 package test;
 
 
+import java.time.temporal.ValueRange;
+
 public class StatLib {
 
     // simple average
@@ -35,19 +37,33 @@ public class StatLib {
         float sum = 0;
         final int n = x.length;
 
-        for(int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
             sum += (x[i] - getMean(x, n)) * (y[i] - getMean(y, n));
         return sum / (n - 1);
     }
 
     // returns the Pearson correlation coefficient of X and Y
     public static float pearson(float[] x, float[] y) {
-        return 0;
+        return (float) (cov(x,y) / (Math.sqrt(var(x)) * Math.sqrt(var(y))) );
+
     }
 
     // performs a linear regression and returns the line equation
     public static Line linear_reg(Point[] points) {
-        return null;
+        float a, b;
+        float[] xArr = new float[points.length];
+        float[] yArr = new float[points.length];
+
+        for (int i = 0; i <points.length ; i++) {
+            xArr[i] = points[i].x;
+            yArr[i] = points[i].y;
+        }
+
+        a = cov(xArr, yArr) / var(xArr);
+        b = avg(yArr) - a*avg(xArr);
+
+        return new Line(a,b);
+
     }
 
     // returns the deviation between point p and the line equation of the points
