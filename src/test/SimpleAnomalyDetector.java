@@ -3,7 +3,6 @@ package test;
 import java.util.List;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
-	
 
 	@Override
 	public void learnNormal(TimeSeries ts) {
