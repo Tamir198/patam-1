@@ -3,7 +3,6 @@ package test;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Random;
 
 public class MainTrain {
@@ -76,7 +75,7 @@ public class MainTrain {
 		generateTrainCSV(a1,b1,a2,b2);
 		TimeSeries ts=new TimeSeries("trainFile1.csv");
 		try {
-			ts.readcvsFile();
+			ts.readCsvFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
