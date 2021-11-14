@@ -1,32 +1,61 @@
 package test;
 
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 
+
 public class TimeSeries {
-    private String fileName;
-    private String[] flightParams;
+
+    String fileName;
+    String[][] dataMatrix;
+
 
     public TimeSeries(String csvFileName) {
         fileName = csvFileName;
     }
 
     public void readCsvFile() throws Exception {
-        String splitBy = ",";
-        BufferedReader br = new BufferedReader(new FileReader(this.fileName));
+        int numOfCriteria = 0;
+        int counter = 1; // represents the lines in the matrix dataNames
+        String[] data;
+        String delimiter = ",";
+        BufferedReader buf = new BufferedReader(new FileReader((this.fileName)));
         String line;
 
-        while ((line = br.readLine()) != null) {
-            String[] data = line.split(splitBy);
-            if(flightParams == null){
-                flightParams = data;
-                System.out.println(Arrays.toString(flightParams));
-
+        line = buf.readLine();
+        if (line!= null){
+            data = line.split(delimiter);
+            numOfCriteria = data.length;
+            dataMatrix = new String[getNumOfLines(fileName)][numOfCriteria];
+            for (int i = 0; i < numOfCriteria; i++) {
+                dataMatrix[0][i] = data[i];
             }
         }
-        br.close();
 
+
+        while((line = buf.readLine()) != null){
+            data = line.split(delimiter);
+
+            for (int i=0; i<numOfCriteria; i++){
+                dataMatrix[counter][i] = data[i];
+            }
+
+            System.out.println(Arrays.toString(data));
+            counter++;
+        }
+
+        buf.close();
+    }
+
+    public int getNumOfLines (String fileName) throws Exception{
+        BufferedReader buf = new BufferedReader(new FileReader((fileName)));
+        int counter = 0; // the function will return one line more than reality
+        while((buf.readLine()) != null){
+            counter++;
+        }
+        return counter;
     }
 
 }
