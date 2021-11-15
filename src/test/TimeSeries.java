@@ -9,7 +9,8 @@ import java.util.Arrays;
 public class TimeSeries {
 
     String fileName;
-    String[][] dataMatrix;
+    float[][] dataMatrix;
+    String[] criteriaTitles;
 
 
     public TimeSeries(String csvFileName) {
@@ -28,9 +29,10 @@ public class TimeSeries {
         if (line!= null){
             data = line.split(delimiter);
             numOfCriteria = data.length;
-            dataMatrix = new String[getNumOfLines(fileName)][numOfCriteria];
-            for (int i = 0; i < numOfCriteria; i++) {
-                dataMatrix[0][i] = data[i];
+            dataMatrix = new float[getNumOfLines(fileName)][numOfCriteria];
+            criteriaTitles  = new String[data.length];
+            for (int i = 0; i < data.length ; i++) {
+                criteriaTitles[i] = data[i];
             }
         }
 
@@ -39,7 +41,7 @@ public class TimeSeries {
             data = line.split(delimiter);
 
             for (int i=0; i<numOfCriteria; i++){
-                dataMatrix[counter][i] = data[i];
+                dataMatrix[counter][i]  = Float.parseFloat((data[i]));
             }
 
             System.out.println(Arrays.toString(data));
