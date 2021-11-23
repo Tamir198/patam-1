@@ -1,29 +1,56 @@
 package test;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import jdk.internal.dynalink.beans.StaticClass;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 
-	//Algorithm to find correlation between columns
+    List<CorrelatedFeatures> correlatedFeatures = new LinkedList<CorrelatedFeatures>();
+
+    //Algorithm to find correlation between columns
     @Override
     public void learnNormal(TimeSeries ts) {
         float[][] data = ts.getDataMatrix();
+        double threshold = ts.threshold;
 
         for (int j = 0; j < data.length; j++) {
             float m = 0, c = -1;
             for (int i = j + 1; i < data[j].length; i++) {
                 float p = Math.abs(StatLib.pearson(ts.getMatrixColumn(j), ts.getMatrixColumn(i)));
                 if (p > m) {
-					m = p;
+                    m = p;
                     c = i;
                 }
             }
 
-            if(c != -1){
-                //Do something with correlated columns
+            if (c != -1 && m * 1.1 > threshold) {
+                correlatedFeatures.add(new CorrelatedFeatures(
+                        ts.getCriteriaTitles(j),
+                        ts.getCriteriaTitles((int) c),
+                        m,
+                        StatLib.linear_reg(
+                                getPointsFromCorrelatedColumns(ts.getMatrixColumn(j),
+                                        ts.getMatrixColumn((int) c))
+                        ),
+                        (float) threshold));
             }
         }
+    }
 
+    private Point[] getPointsFromCorrelatedColumns(float[] x, float[] y) {
+        Point[] res = new Point[x.length];
+        Point tempPoint;
+
+        for (int i = 0; i < x.length; i++) {
+            tempPoint = new Point(x[i], y[i]);
+            res[i] = tempPoint;
+        }
+
+        return res;
     }
 
     @Override

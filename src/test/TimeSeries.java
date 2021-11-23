@@ -10,9 +10,15 @@ public class TimeSeries {
     private String fileName;
 
     private float[][] dataMatrix;
-    private String[] criteriaTitles;
-    int numOfRows = 0;
 
+    private String[] criteriaTitles;
+
+    public String getCriteriaTitles(int i) {
+        return criteriaTitles[i];
+    }
+
+    int numOfRows = 0;
+    public double threshold = 0.9;
 
     public TimeSeries(String csvFileName) {
         fileName = csvFileName;
