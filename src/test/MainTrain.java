@@ -7,80 +7,82 @@ import java.util.Random;
 
 public class MainTrain {
 
-	static Random r=new Random();
+    static Random r = new Random();
 
-	// this is a simple test to put you on the right track
-	static void generateTrainCSV(float a1,float b1, float a2, float b2){
-		try {
-			PrintWriter out=new PrintWriter(new FileWriter("trainFile1.csv"));
-			out.println("A,B,C,D");
-			Line ac=new Line(a1,b1);
-			Line bd=new Line(a2,b2);
-			for(int i=1;i<=100;i++){
-				float a=i;
-				float b=r.nextInt(40);
-				out.println(a+","+b+","+(ac.f(a)-0.02+(r.nextInt(40))/100.0f)+","+(bd.f(b)-0.02+(r.nextInt(40))/100.0f));
-			}
-			out.close();
-		}catch(IOException e) {}
-	}
+    // this is a simple test to put you on the right track
+    static void generateTrainCSV(float a1, float b1, float a2, float b2) {
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter("trainFile1.csv"));
+            out.println("A,B,C,D");
+            Line ac = new Line(a1, b1);
+            Line bd = new Line(a2, b2);
+            for (int i = 1; i <= 100; i++) {
+                float a = i;
+                float b = r.nextInt(40);
+                out.println(a + "," + b + "," + (ac.f(a) - 0.02 + (r.nextInt(40)) / 100.0f) + "," + (bd.f(b) - 0.02 + (r.nextInt(40)) / 100.0f));
+            }
+            out.close();
+        } catch (IOException e) {
+        }
+    }
 
-	static void generateTestCSV(float a1,float b1, float a2, float b2, int anomaly){
-		try {
-			PrintWriter out=new PrintWriter(new FileWriter("testFile1.csv"));
-			out.println("A,B,C,D");
-			Line ac=new Line(a1,b1);
-			Line bd=new Line(a2,b2);
-			for(int i=1;i<=100;i++){
-				float a=i;
-				float b=r.nextInt(40);
-				if(i!=anomaly)
-					out.println(a+","+b+","+(ac.f(a)-0.02+(r.nextInt(40))/100.0f)+","+(bd.f(b)-0.02+(r.nextInt(40))/100.0f));
-				else
-					out.println(a+","+b+","+(ac.f(a)+1)+","+(bd.f(b)-0.02+(r.nextInt(40))/100.0f));
-			}
-			out.close();
-		}catch(IOException e) {}
-	}
+    static void generateTestCSV(float a1, float b1, float a2, float b2, int anomaly) {
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter("testFile1.csv"));
+            out.println("A,B,C,D");
+            Line ac = new Line(a1, b1);
+            Line bd = new Line(a2, b2);
+            for (int i = 1; i <= 100; i++) {
+                float a = i;
+                float b = r.nextInt(40);
+                if (i != anomaly)
+                    out.println(a + "," + b + "," + (ac.f(a) - 0.02 + (r.nextInt(40)) / 100.0f) + "," + (bd.f(b) - 0.02 + (r.nextInt(40)) / 100.0f));
+                else
+                    out.println(a + "," + b + "," + (ac.f(a) + 1) + "," + (bd.f(b) - 0.02 + (r.nextInt(40)) / 100.0f));
+            }
+            out.close();
+        } catch (IOException e) {
+        }
+    }
 
-	static void checkCorrelationTrain(CorrelatedFeatures c,String f1, String f2, float a, float b){
-		if(c.feature1.equals(f1)){
-			if(!c.feature2.equals(f2))
-				System.out.println("wrong correlated feature of "+f1+" (-20)");
-			else{
-				if(c.corrlation<0.99)
-					System.out.println(f1+"-"+f2+" wrong correlation detected (-5)");
-				if(c.lin_reg.a<a-0.5f || c.lin_reg.a>a+0.5f)
-					System.out.println(f1+"-"+f2+" wrong value of line_reg.a (-5)");
-				if(c.lin_reg.b<b-0.5f || c.lin_reg.b>b+0.5f)
-					System.out.println(f1+"-"+f2+" wrong value of line_reg.b (-5)");
-				if(c.threshold>0.3)
-					System.out.println(f1+"-"+f2+" wrong threshold detected (-5)");
-			}
-		}
+    static void checkCorrelationTrain(CorrelatedFeatures c, String f1, String f2, float a, float b) {
+        if (c.feature1.equals(f1)) {
+            if (!c.feature2.equals(f2))
+                System.out.println("wrong correlated feature of " + f1 + " (-20)");
+            else {
+                if (c.corrlation < 0.99)
+                    System.out.println(f1 + "-" + f2 + " wrong correlation detected (-5)");
+                if (c.lin_reg.a < a - 0.5f || c.lin_reg.a > a + 0.5f)
+                    System.out.println(f1 + "-" + f2 + " wrong value of line_reg.a (-5)");
+                if (c.lin_reg.b < b - 0.5f || c.lin_reg.b > b + 0.5f)
+                    System.out.println(f1 + "-" + f2 + " wrong value of line_reg.b (-5)");
+                if (c.threshold > 0.3)
+                    System.out.println(f1 + "-" + f2 + " wrong threshold detected (-5)");
+            }
+        }
 
-	}
-
-
-	public static void main(String[] args) {
-		float a1=1+r.nextInt(10), b1=-50+r.nextInt(100);
-		float a2=1+r.nextInt(20) , b2=-50+r.nextInt(100);
+    }
 
 
-		// test the learned model: (40 points)
-		// expected correlations:
-		//	A-C: y=a1*x+b1
-		//	B-D: y=a2*x+b2
+    public static void main(String[] args) {
+        float a1 = 1 + r.nextInt(10), b1 = -50 + r.nextInt(100);
+        float a2 = 1 + r.nextInt(20), b2 = -50 + r.nextInt(100);
 
-		generateTrainCSV(a1,b1,a2,b2);
-		TimeSeries ts=new TimeSeries("trainFile1.csv");
-		try {
-			ts.readCsvFile();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-//		SimpleAnomalyDetector ad=new SimpleAnomalyDetector();
-//		ad.learnNormal(ts);
+
+        // test the learned model: (40 points)
+        // expected correlations:
+        //	A-C: y=a1*x+b1
+        //	B-D: y=a2*x+b2
+
+        generateTrainCSV(a1, b1, a2, b2);
+        TimeSeries ts = new TimeSeries("trainFile1.csv");
+        try {
+            ts.readCsvFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SimpleAnomalyDetector ad = new SimpleAnomalyDetector();
+        ad.learnNormal(ts);
 //		List<CorrelatedFeatures> cf=ad.getNormalModel();
 //
 //		if(cf.size()!=2)
@@ -115,6 +117,6 @@ public class MainTrain {
 //
 //
 //		System.out.println("done");//
-	}
+    }
 
 }

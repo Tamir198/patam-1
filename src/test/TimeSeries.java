@@ -8,8 +8,10 @@ import java.io.FileReader;
 public class TimeSeries {
 
     private String fileName;
+
     private float[][] dataMatrix;
     private String[] criteriaTitles;
+    int numOfRows = 0;
 
 
     public TimeSeries(String csvFileName) {
@@ -26,24 +28,23 @@ public class TimeSeries {
         if (line != null) {
             data = line.split(delimiter);
             numOfCriteria = data.length;
-            dataMatrix = new float[getNumOfLines(fileName)][numOfCriteria];
+            numOfRows  = getNumOfLines(fileName);
+            dataMatrix = new float[numOfRows][numOfCriteria];
             criteriaTitles = new String[data.length];
             System.arraycopy(data, 0, criteriaTitles, 0, data.length);
         }
 
         while ((line = buf.readLine()) != null) {
             data = line.split(delimiter);
-
             for (int i = 0; i < numOfCriteria; i++) {
                 dataMatrix[counter][i] = Float.parseFloat(data[i]);
             }
             counter++;
         }
-
         buf.close();
     }
 
-    public int getNumOfLines(String fileName) throws Exception {
+    private int getNumOfLines(String fileName) throws Exception {
         BufferedReader buf = new BufferedReader(new FileReader((fileName)));
         int counter = 0; // the function will return one line more than reality
 
@@ -51,6 +52,18 @@ public class TimeSeries {
             counter++;
         }
         return counter - 1;
+    }
+
+    public float[] getMatrixColumn(int index){
+        float[] column = new float[numOfRows];
+        for(int row = 0; row < numOfRows; row++){
+            column[row] = dataMatrix[row][index];
+        }
+        return column;
+    }
+
+    public float[][] getDataMatrix() {
+        return dataMatrix;
     }
 
 }
