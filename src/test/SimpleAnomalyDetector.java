@@ -1,9 +1,5 @@
 package test;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-import jdk.internal.dynalink.beans.StaticClass;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
