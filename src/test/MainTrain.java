@@ -3,6 +3,7 @@ package test;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Random;
 
 public class MainTrain {
@@ -83,15 +84,15 @@ public class MainTrain {
         }
         SimpleAnomalyDetector ad = new SimpleAnomalyDetector();
         ad.learnNormal(ts);
-//		List<CorrelatedFeatures> cf=ad.getNormalModel();
+		List<CorrelatedFeatures> cf=ad.getNormalModel();
 //
-//		if(cf.size()!=2)
-//			System.out.println("wrong size of correlated features (-40)");
-//		else
-//			for(CorrelatedFeatures c : cf) {
-//				checkCorrelationTrain(c,"A","C",a1,b1); // 20 points
-//				checkCorrelationTrain(c,"B","D",a2,b2); // 20 points
-//			}
+		if(cf.size()!=2)
+			System.out.println("wrong size of correlated features (-40)");
+		else
+			for(CorrelatedFeatures c : cf) {
+				checkCorrelationTrain(c,"A","C",a1,b1); // 20 points
+				checkCorrelationTrain(c,"B","D",a2,b2); // 20 points
+			}
 //
 //		// test the anomaly detector: (60 points)
 //		// one simply anomaly is injected to the data

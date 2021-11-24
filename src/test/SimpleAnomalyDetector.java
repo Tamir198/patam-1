@@ -24,17 +24,31 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
             }
 
             if (c != -1 && m * 1.1 > threshold) {
+                Point [] points = getPointsFromCorrelatedColumns(ts.getMatrixColumn(j), ts.getMatrixColumn((int) c));
+                Line line = StatLib.linear_reg(points);
+
+
                 correlatedFeatures.add(new CorrelatedFeatures(
                         ts.getCriteriaTitles(j),
                         ts.getCriteriaTitles((int) c),
                         m,
-                        StatLib.linear_reg(
-                                getPointsFromCorrelatedColumns(ts.getMatrixColumn(j),
-                                        ts.getMatrixColumn((int) c))
-                        ),
-                        (float) threshold));
+                        line,
+                        (float) getMaxDeviation(line,points))
+                );
             }
         }
+    }
+
+    private Object getMaxDeviation(Line line,Point[] points) {
+        float res = 0;
+        for (int i = 0; i < points.length  ; i++) {
+            float deviation = StatLib.dev(points[i],line);
+            if(deviation > res){
+                res = deviation;
+            }
+
+        }
+        return res;
     }
 
     private Point[] getPointsFromCorrelatedColumns(float[] x, float[] y) {
@@ -55,6 +69,6 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
     }
 
     public List<CorrelatedFeatures> getNormalModel() {
-        return null;
+        return correlatedFeatures;
     }
 }
