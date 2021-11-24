@@ -8,21 +8,19 @@ import java.io.FileReader;
 public class TimeSeries {
 
     private String fileName;
-
-    private float[][] dataMatrix;
-
+        private float[][] dataMatrix;
     private String[] criteriaTitles;
-
-    public String getCriteriaTitles(int i) {
-        return criteriaTitles[i];
-    }
-
     int numOfRows = 0;
     public double threshold = 0.9;
 
     public TimeSeries(String csvFileName) {
         fileName = csvFileName;
     }
+
+    public String getCriteriaTitles(int i) {
+        return criteriaTitles[i];
+    }
+
 
     void readCsvFile() throws Exception {
         int numOfCriteria = 0, counter = 0;
@@ -70,6 +68,16 @@ public class TimeSeries {
 
     public float[][] getDataMatrix() {
         return dataMatrix;
+    }
+
+
+    public int getColumnIndexOfCriteria(String criteria){
+        for (int i = 0; i < criteriaTitles.length; i++) {
+            if(criteria.equals(criteriaTitles[i])){
+                return i;
+            }
+        }
+       return -1;
     }
 
 }

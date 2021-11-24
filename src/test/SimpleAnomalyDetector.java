@@ -5,11 +5,16 @@ import java.util.List;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 
-    List<CorrelatedFeatures> correlatedFeatures = new LinkedList<CorrelatedFeatures>();
+    private List<CorrelatedFeatures> correlatedFeatures = new LinkedList<CorrelatedFeatures>();
 
     //Algorithm to find correlation between columns
     @Override
     public void learnNormal(TimeSeries ts) {
+        try {
+            ts.readCsvFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         float[][] data = ts.getDataMatrix();
         double threshold = ts.threshold;
 
@@ -24,7 +29,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
             }
 
             if (c != -1 && m * 1.1 > threshold) {
-                Point [] points = getPointsFromCorrelatedColumns(ts.getMatrixColumn(j), ts.getMatrixColumn((int) c));
+                Point[] points = getPointsFromCorrelatedColumns(ts.getMatrixColumn(j), ts.getMatrixColumn((int) c));
                 Line line = StatLib.linear_reg(points);
 
 
@@ -33,17 +38,17 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
                         ts.getCriteriaTitles((int) c),
                         m,
                         line,
-                        (float) getMaxDeviation(line,points))
+                        (float) getMaxDeviation(line, points))
                 );
             }
         }
     }
 
-    private Object getMaxDeviation(Line line,Point[] points) {
+    private Object getMaxDeviation(Line line, Point[] points) {
         float res = 0;
-        for (int i = 0; i < points.length  ; i++) {
-            float deviation = StatLib.dev(points[i],line);
-            if(deviation > res){
+        for (int i = 0; i < points.length; i++) {
+            float deviation = StatLib.dev(points[i], line);
+            if (deviation > res) {
                 res = deviation;
             }
 
@@ -65,7 +70,33 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 
     @Override
     public List<AnomalyReport> detect(TimeSeries ts) {
-        return null;
+        List<AnomalyReport> report = new LinkedList<AnomalyReport>();
+        Line line;
+        float[][] data = new float[0][];
+
+        try {
+            ts.getDataMatrix();
+            ts.readCsvFile();
+            data = ts.getDataMatrix();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < ts.numOfRows; i++) {
+            for (CorrelatedFeatures cr : correlatedFeatures) {
+
+                Point tempPoint = new Point(data[i][ts.getColumnIndexOfCriteria(cr.feature1)],
+                        data[i][ts.getColumnIndexOfCriteria(cr.feature2)]);
+
+                if (StatLib.dev(tempPoint, cr.lin_reg) > cr.threshold * 1.1) {
+//                    System.out.println(tempPoint.x + "-" +   tempPoint.y);
+                    report.add(new AnomalyReport(cr.feature1 + "-" + cr.feature2,
+                            i+1
+                            ));
+                }
+            }
+        }
+        return report;
     }
 
     public List<CorrelatedFeatures> getNormalModel() {
