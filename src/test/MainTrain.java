@@ -38,10 +38,11 @@ public class MainTrain {
 
 
     public static void main(String[] args) {
-        FileIO fio=new FileIO("input.txt", "output.txt");
+        //FileIO fio=new FileIO("input.txt", "output.txt");
+        FileIO fio = null;
         CLI cli=new CLI(fio);
         cli.start();
-        fio.close();
+//        fio.close();
         check("output.txt","expectedOutput.txt");
         System.out.println("done");
     }

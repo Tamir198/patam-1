@@ -49,10 +49,10 @@ public class Commands {
 	}
 	
 	// Command class for example:
-	public class ExampleCommand extends Command{
+	public class UploadTimeSeriesFile extends Command{
 
-		public ExampleCommand() {
-			super("this is an example of command");
+		public UploadTimeSeriesFile() {
+			super("1. upload a time series csv file");
 		}
 
 		@Override
@@ -61,6 +61,67 @@ public class Commands {
 		}		
 	}
 	
-	// implement here all other commands
+
+	public class ChangeAlgoSettings extends Command{
+
+		public ChangeAlgoSettings() {
+			super("2. algorithm settings");
+		}
+
+		@Override
+		public void execute() {
+			dio.write(description);
+		}
+	}
+
+	public class DetectAnomalies extends Command{
+
+		public DetectAnomalies() {
+			super("3. detect anomalies");
+		}
+
+		@Override
+		public void execute() {
+			dio.write(description);
+		}
+	}
+
+	public class DisplayResults extends Command{
+
+		public DisplayResults () {
+			super("4. display results");
+		}
+
+		@Override
+		public void execute() {
+			dio.write(description);
+		}
+	}
+
+	public class UploadAndAnalyzeResults extends Command{
+
+		public UploadAndAnalyzeResults() {
+			super("5. upload anomalies and analyze results");
+		}
+
+		@Override
+		public void execute() {
+			dio.write(description);
+		}
+	}
+
+	public class Exit extends Command{
+
+		public Exit() {
+			super("6. exit");
+		}
+
+		@Override
+		public void execute() {
+			dio.write(description);
+		}
+	}
+
+
 	
 }
