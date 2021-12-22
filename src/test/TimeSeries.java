@@ -8,10 +8,21 @@ import java.io.FileReader;
 public class TimeSeries {
 
     private String fileName;
-        private float[][] dataMatrix;
+    private float[][] dataMatrix;
     private String[] criteriaTitles;
     int numOfRows = 0;
-    public double threshold = 0.9;
+    public float threshold = (float) 0.9;
+
+
+    public float getThreshold() {
+        return threshold;
+    }
+
+
+    public void setThreshold(float threshold) {
+        this.threshold = threshold;
+    }
+
 
     public TimeSeries(String csvFileName) {
         fileName = csvFileName;
@@ -79,5 +90,6 @@ public class TimeSeries {
         }
        return -1;
     }
+
 
 }

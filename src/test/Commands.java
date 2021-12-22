@@ -2,12 +2,9 @@ package test;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Commands {
+    TimeSeries testTimeSeries,trainTimeSeries;
 
     // Default IO interface
     public interface DefaultIO {
@@ -63,16 +60,16 @@ public class Commands {
         @Override
         public void execute() {
             dio.write("Please upload your local train CSV file.\n");
-            generateCvsFile("anomalyTest.csv");
+            generateCsvFile("anomalyTest.csv");
             dio.write("Upload complete.\n");
 
             dio.write("Please upload your local test CSV file.\n");
-            generateCvsFile("anomalyTrain.csv");
+            generateCsvFile("anomalyTrain.csv");
             dio.write("Upload complete.\n");
         }
     }
 
-    private void generateCvsFile(String fileName) {
+    private void generateCsvFile(String fileName) {
         String nextLine = "";
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -98,11 +95,29 @@ public class Commands {
             super("2. algorithm settings");
         }
 
-        
-
         @Override
         public void execute() {
-            dio.write(description);
+            dio.write("The current correlation threshold is " + 0.9 + "\n");
+            dio.write("Type a new threshold\n");
+
+            testTimeSeries = new TimeSeries("anomalyTest.csv");
+            trainTimeSeries = new TimeSeries("anomalyTrain.csv");
+
+            float newThreshHold =  dio.readVal();
+            boolean hasPicked = false;
+            while(!hasPicked){
+                if(newThreshHold > 0 && newThreshHold <1){
+                    testTimeSeries.setThreshold(newThreshHold);
+                    trainTimeSeries.setThreshold(newThreshHold);
+                    hasPicked = true;
+                    System.out.println(trainTimeSeries.getThreshold());
+                }else{
+                    dio.write("“please choose a value between 0 and 1.\n");
+                    newThreshHold =  dio.readVal();
+                }
+            }
+
+
         }
     }
 
