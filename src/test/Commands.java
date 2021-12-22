@@ -2,9 +2,12 @@ package test;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Commands {
-    TimeSeries testTimeSeries,trainTimeSeries;
+    private TimeSeries testTimeSeries,trainTimeSeries;
+    private List<AnomalyReport> anomalyReports = new LinkedList<>();
 
     // Default IO interface
     public interface DefaultIO {
@@ -60,11 +63,11 @@ public class Commands {
         @Override
         public void execute() {
             dio.write("Please upload your local train CSV file.\n");
-            generateCsvFile("anomalyTest.csv");
+            generateCsvFile("anomalyTrain.csv");
             dio.write("Upload complete.\n");
 
             dio.write("Please upload your local test CSV file.\n");
-            generateCsvFile("anomalyTrain.csv");
+            generateCsvFile("anomalyTest.csv");
             dio.write("Upload complete.\n");
         }
     }
@@ -129,9 +132,9 @@ public class Commands {
 
         @Override
         public void execute() {
-            SimpleAnomalyDetector simpleAnomalyDetector = new SimpleAnomalyDetector();
+           SimpleAnomalyDetector simpleAnomalyDetector = new SimpleAnomalyDetector();
             simpleAnomalyDetector.learnNormal(trainTimeSeries);
-            simpleAnomalyDetector.detect(testTimeSeries);
+            anomalyReports  = simpleAnomalyDetector.detect(testTimeSeries);
             dio.write("anomaly detection complete.\n");
         }
     }
@@ -144,7 +147,10 @@ public class Commands {
 
         @Override
         public void execute() {
-            dio.write(description);
+            for (AnomalyReport ar: anomalyReports) {
+                dio.write(ar.timeStep + "\t" + ar.description + "\n");
+            }
+            dio.write("Done.\n");
         }
     }
 
