@@ -63,33 +63,32 @@ public class Commands {
         @Override
         public void execute() {
             dio.write("Please upload your local train CSV file.\n");
-            //TODO upload cvs file and after:
-            String nextLine = "";
-            try {
-                //TODO extract to function and make it work on the second file name
-                FileWriter writer = new FileWriter(".anomalyTest.csv");
-                while (!nextLine.equals("done")) {
-                    nextLine = dio.readText();
-                    writer.write(nextLine);
-                    if(!nextLine.equals("")){
-                        writer.write("\n");
-                    }
-                }
-
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
+            generateCvsFile("anomalyTest.csv");
             dio.write("Upload complete.\n");
 
             dio.write("Please upload your local test CSV file.\n");
-            //TODO upload cvs file and after:
+            generateCvsFile("anomalyTrain.csv");
             dio.write("Upload complete.\n");
-
-
         }
+    }
+
+    private void generateCvsFile(String fileName) {
+        String nextLine = "";
+        try {
+            FileWriter writer = new FileWriter(fileName);
+            while (!nextLine.equals("done")) {
+                nextLine = dio.readText();
+                writer.write(nextLine);
+                if (!nextLine.equals("")) {
+                    writer.write("\n");
+                }
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -98,6 +97,8 @@ public class Commands {
         public ChangeAlgoSettings() {
             super("2. algorithm settings");
         }
+
+        
 
         @Override
         public void execute() {
