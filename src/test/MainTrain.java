@@ -41,7 +41,7 @@ public class MainTrain {
         CLI cli = new CLI(fio);
         cli.start();
         fio.close();
-        check("output.txt", "expectedOutput.txt");
+        check("src/test/output.txt", "src/test/expectedOutput.txt");
         System.out.println("done");
     }
 

@@ -27,7 +27,7 @@ public class CLI {
 
     public void start() {
         //Keep interacting with the user untill he presses 6
-        int counter = 3 ;
+        int counter = 4 ;
         while(counter > 0 ) {
             dio.write("Welcome to the Anomaly Detection Server.\n" +
                     "Please choose an option:\n");

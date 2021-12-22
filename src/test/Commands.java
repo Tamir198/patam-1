@@ -73,12 +73,13 @@ public class Commands {
         String nextLine = "";
         try {
             FileWriter writer = new FileWriter(fileName);
+            nextLine = dio.readText();
             while (!nextLine.equals("done")) {
-                nextLine = dio.readText();
                 writer.write(nextLine);
                 if (!nextLine.equals("")) {
                     writer.write("\n");
                 }
+                nextLine = dio.readText();
             }
             writer.close();
 
@@ -110,7 +111,6 @@ public class Commands {
                     testTimeSeries.setThreshold(newThreshHold);
                     trainTimeSeries.setThreshold(newThreshHold);
                     hasPicked = true;
-                    System.out.println(trainTimeSeries.getThreshold());
                 }else{
                     dio.write("“please choose a value between 0 and 1.\n");
                     newThreshHold =  dio.readVal();
@@ -129,7 +129,10 @@ public class Commands {
 
         @Override
         public void execute() {
-            dio.write(description);
+            SimpleAnomalyDetector simpleAnomalyDetector = new SimpleAnomalyDetector();
+            simpleAnomalyDetector.learnNormal(trainTimeSeries);
+            simpleAnomalyDetector.detect(testTimeSeries);
+            dio.write("anomaly detection complete.\n");
         }
     }
 
