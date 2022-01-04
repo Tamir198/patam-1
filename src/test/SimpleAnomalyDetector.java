@@ -7,6 +7,11 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 
     private List<CorrelatedFeatures> correlatedFeatures = new LinkedList<CorrelatedFeatures>();
 
+
+    public List<CorrelatedFeatures> getCorrelatedFeatures() {
+        return correlatedFeatures;
+    }
+
     //Algorithm to find correlation between columns
     @Override
     public void learnNormal(TimeSeries ts) {
@@ -92,7 +97,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 //                    System.out.println(tempPoint.x + "-" +   tempPoint.y);
                     report.add(new AnomalyReport(cr.feature1 + "-" + cr.feature2,
                             i+1
-                            ));
+                    ));
                 }
             }
         }
